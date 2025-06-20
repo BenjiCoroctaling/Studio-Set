@@ -1,0 +1,108 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+
+export default function StudioRequestForm() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    description: "",
+    designOption: "client",
+    images: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setForm({
+      ...form,
+      [name]: files ? files : value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Send form data to backend or API
+    console.log("Form submitted:", form);
+    alert("Demande envoyée avec succès !");
+  };
+
+  return (
+    <main className="min-h-screen bg-gray-100 p-6 flex items-center justify-center">
+      <Card className="w-full max-w-2xl p-6 bg-white shadow-xl rounded-2xl">
+        <CardContent>
+          <h1 className="text-3xl font-bold mb-6 text-center">Demander un Studio Personnalisé</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="name">Nom</Label>
+              <Input
+                id="name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="description">Description du Studio</Label>
+              <Textarea
+                id="description"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                rows={5}
+                required
+              />
+            </div>
+            <div>
+              <Label>Design</Label>
+              <RadioGroup
+                name="designOption"
+                defaultValue="client"
+                onValueChange={(value) => setForm({ ...form, designOption: value })}
+                className="flex gap-4 mt-2"
+              >
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="client" id="client-design" />
+                  <Label htmlFor="client-design">Par moi (le client)</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="designer" id="designer-design" />
+                  <Label htmlFor="designer-design">Par vos designers</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <div>
+              <Label htmlFor="images">Illustrations (si design client)</Label>
+              <Input
+                id="images"
+                name="images"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleChange}
+              />
+            </div>
+            <Button type="submit" className="w-full mt-4">
+              Envoyer la Demande
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </main>
+  );
+}
